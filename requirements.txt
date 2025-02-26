@@ -1,0 +1,6 @@
+streamlit
+pyaudio
+wave
+flask
+flask-socketio
+python-socketio
