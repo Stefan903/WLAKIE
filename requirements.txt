@@ -2,4 +2,5 @@ streamlit==1.26.0
 Flask==2.3.2
 Flask-SocketIO==5.3.4
 python-socketio==5.8.0
-pyaudio==0.2.13
+sounddevice==0.4.6
+numpy==1.23.5
