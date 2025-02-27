@@ -4,27 +4,24 @@ from firebase_admin import credentials, firestore
 from datetime import datetime
 import time
 import uuid
-import os
 
 # Configuración de Firebase
-def initialize_firebase():
-    if not firebase_admin._apps:
-        cred = credentials.Certificate({
-            "type": os.getenv("service_account"),
-            "project_id": os.getenv("walkie-c3681"),
-            "private_key_id": os.getenv("d9e5139444ec642dee5f02fe9ba15c423dc6934f"),
-            "private_key": os.getenv("-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCh5oj22PJZ4tm5\nWbxQsXCVVdxGyXDavsCrWyyN3l3uy1PlY55rhZWbtlEftE9Pfy+sw4wzOIP9bgpw\nPqfA+kn+YAN3Xqk8+lXLKnQ85Pim4XMtDecXTWdyBH4MNIkG+FrlszESn709yPvs\n9Skpa2qahyHB7YubQS5yg0/jVh7ChkZWF6Khl/ittA5KPa5FY+yr6FG2WPsQt6MT\n0DiTbJsNe2ylqJ6wpws8bDVlwte/Gd3J9rFmbrM3ulFdrKpZqGuCX4LDfnINlSuP\nt0VfoubdxfG2SWQvuKj06kyLNoAERIyobF5T4384onlG1nk8zVUSRbQA34kMAZj/\nXJ175a2/AgMBAAECggEAEcIcLttQBez8jbiaj81OuIqg7UDGOLAoqQMIqY0FB57U\n1nntVATkip5eWphoBKPCQnR2id2+mIs76ODufJvXhufYKX1AGfipdW30LwO8hG2B\nOSVnviYW3SpB+yu+Bf4y1jQoA09zLfZAL9caSzlFiaqd2Mwp/n8RTa06k4iMOjDc\nhdOVQINcyid73z2TjvuYEN3oa5ItlIwm9y8ifh3UrHYbxoTWUP0X0Temuu9R8tpt\nBW+zE34KleicME7Elxp9JRDlmW3XydGkIIwNB6seaVMWruvVJXwwHgGAjoJhSabi\nXxcmq3W2HVNqGO5KzskxBK01BcBwfDjH5s5ExBb74QKBgQDXWJvN6l/2O8z0oqc1\nHCwDCS5QAmnWZQI40Eu6fT+grlZIEAvlV9sRQ9jGe5FbjVWL2OJtaSOjZx1Ots9m\nMP4qlmRHFV1dbMBXlG8sJOmYWt5EpNkuMGQ1KyyzFfOpOkxKq0/Utc6/797/bQp1\nOcLWWMK3ehCEaJPUfEb0KKn23wKBgQDAdvjGPF6e1hs8Yvbmr1jjVWm1TBEl0fK4\nsCripa6rDWeNOh6t/iF4lHhw3tTFtclhq2VEABo3b33ByWRiKrpOU/NNsEAOP3Og\nNlIaV+cnpHOvocHVDIxJ+N6TB5O42wWhINR3bvPEduqQOIw5rVJnS97psGfE7Ah2\nsh9hjaWFIQKBgDA/7kjo5q9pHrcBaq1/rmzPtcy/fa9H2oOYSB90yLjb1wE2dzPf\nx3nK1dtC/IKi3DQFWFZjZFTMWci1NSsUdx5brAQxSUYRg9cbrv0ZGC3Gzl5bAT5U\nIV+4WL+Xf4y/PzDLyYtDYRuoRzK738f8NSeJo7cwZlsEg3rsjYlPQyXJAoGAXuaK\n9lxwH4vdNCJsMgVGJBpKnE2cqvRh5XVgQA+IF+ntJHMDC7IiWO2EkcseSTrAyLsV\nnLkcNDdyX+po6Aq/gL3eW3FLtHrPDbGbPEgZv69UJ8bv55hfWF4xiXgT+/NrTC7+\n9MEty7MDKAfqBMqUtkBv8vS7xhrIdZaQ6K5KbmECgYEAyRdfsGzWpCdy7hSGamBg\nI9ZPMY/O7vsB3c7vdt0gCCGa30to6JWRkyjHsiyAJYEZ8u+Em8IZb2wnIF6Hlv+T\nVyUJT1/38LvDU+lIpUNI50lpc5ivg+FpJUiVO/gpHqv6+niDnSSEK5kDX5k13WG1\nTTacpi++OKLWyqBciiY2CKM=\n-----END PRIVATE KEY-----\n"),
-            "client_email": os.getenv("firebase-adminsdk-fbsvc@walkie-c3681.iam.gserviceaccount.com"),
-            "client_id": os.getenv("102913928283174122005"),
-            "auth_uri": os.getenv("https://accounts.google.com/o/oauth2/auth"),
-            "token_uri": os.getenv("https://oauth2.googleapis.com/token"),
-            "auth_provider_x509_cert_url": os.getenv("https://www.googleapis.com/oauth2/v1/certs"),
-            "client_x509_cert_url": os.getenv("https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40walkie-c3681.iam.gserviceaccount.com"),
-            "universe_domain": os.getenv("googleapis.com"),
-        })
-        firebase_admin.initialize_app(cred)
+if not firebase_admin._apps:
+    cred = credentials.Certificate({
+        "type": "service_account",
+        "project_id": "walkie-c3681",
+        "private_key_id": "d9e5139444ec642dee5f02fe9ba15c423dc6934f",
+        "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCh5oj22PJZ4tm5\nWbxQsXCVVdxGyXDavsCrWyyN3l3uy1PlY55rhZWbtlEftE9Pfy+sw4wzOIP9bgpw\nPqfA+kn+YAN3Xqk8+lXLKnQ85Pim4XMtDecXTWdyBH4MNIkG+FrlszESn709yPvs\n9Skpa2qahyHB7YubQS5yg0/jVh7ChkZWF6Khl/ittA5KPa5FY+yr6FG2WPsQt6MT\n0DiTbJsNe2ylqJ6wpws8bDVlwte/Gd3J9rFmbrM3ulFdrKpZqGuCX4LDfnINlSuP\nt0VfoubdxfG2SWQvuKj06kyLNoAERIyobF5T4384onlG1nk8zVUSRbQA34kMAZj/\nXJ175a2/AgMBAAECggEAEcIcLttQBez8jbiaj81OuIqg7UDGOLAoqQMIqY0FB57U\n1nntVATkip5eWphoBKPCQnR2id2+mIs76ODufJvXhufYKX1AGfipdW30LwO8hG2B\nOSVnviYW3SpB+yu+Bf4y1jQoA09zLfZAL9caSzlFiaqd2Mwp/n8RTa06k4iMOjDc\nhdOVQINcyid73z2TjvuYEN3oa5ItlIwm9y8ifh3UrHYbxoTWUP0X0Temuu9R8tpt\nBW+zE34KleicME7Elxp9JRDlmW3XydGkIIwNB6seaVMWruvVJXwwHgGAjoJhSabi\nXxcmq3W2HVNqGO5KzskxBK01BcBwfDjH5s5ExBb74QKBgQDXWJvN6l/2O8z0oqc1\nHCwDCS5QAmnWZQI40Eu6fT+grlZIEAvlV9sRQ9jGe5FbjVWL2OJtaSOjZx1Ots9m\nMP4qlmRHFV1dbMBXlG8sJOmYWt5EpNkuMGQ1KyyzFfOpOkxKq0/Utc6/797/bQp1\nOcLWWMK3ehCEaJPUfEb0KKn23wKBgQDAdvjGPF6e1hs8Yvbmr1jjVWm1TBEl0fK4\nsCripa6rDWeNOh6t/iF4lHhw3tTFtclhq2VEABo3b33ByWRiKrpOU/NNsEAOP3Og\nNlIaV+cnpHOvocHVDIxJ+N6TB5O42wWhINR3bvPEduqQOIw5rVJnS97psGfE7Ah2\nsh9hjaWFIQKBgDA/7kjo5q9pHrcBaq1/rmzPtcy/fa9H2oOYSB90yLjb1wE2dzPf\nx3nK1dtC/IKi3DQFWFZjZFTMWci1NSsUdx5brAQxSUYRg9cbrv0ZGC3Gzl5bAT5U\nIV+4WL+Xf4y/PzDLyYtDYRuoRzK738f8NSeJo7cwZlsEg3rsjYlPQyXJAoGAXuaK\n9lxwH4vdNCJsMgVGJBpKnE2cqvRh5XVgQA+IF+ntJHMDC7IiWO2EkcseSTrAyLsV\nnLkcNDdyX+po6Aq/gL3eW3FLtHrPDbGbPEgZv69UJ8bv55hfWF4xiXgT+/NrTC7+\n9MEty7MDKAfqBMqUtkBv8vS7xhrIdZaQ6K5KbmECgYEAyRdfsGzWpCdy7hSGamBg\nI9ZPMY/O7vsB3c7vdt0gCCGa30to6JWRkyjHsiyAJYEZ8u+Em8IZb2wnIF6Hlv+T\nVyUJT1/38LvDU+lIpUNI50lpc5ivg+FpJUiVO/gpHqv6+niDnSSEK5kDX5k13WG1\nTTacpi++OKLWyqBciiY2CKM=\n-----END PRIVATE KEY-----\n",
+        "client_email": "firebase-adminsdk-fbsvc@walkie-c3681.iam.gserviceaccount.com",
+        "client_id": "102913928283174122005",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40walkie-c3681.iam.gserviceaccount.com",
+        "universe_domain": "googleapis.com"
+    })
+    firebase_admin.initialize_app(cred)
 
-initialize_firebase()
 db = firestore.client()
 
 # Estado de la sesión
@@ -37,40 +34,54 @@ if 'messages' not in st.session_state:
 
 # Funciones principales
 def create_group():
-    group_id = str(uuid.uuid4())[:8]
-    group_ref = db.collection('groups').document(group_id)
-    group_ref.set({
-        'created_at': datetime.now(),
-        'members': [st.session_state.username],
-        'messages': []
-    })
-    return group_id
+    try:
+        group_id = str(uuid.uuid4())[:8]
+        group_ref = db.collection('groups').document(group_id)
+        group_ref.set({
+            'created_at': datetime.now(),
+            'members': [st.session_state.username],
+            'messages': []
+        })
+        return group_id
+    except Exception as e:
+        st.error(f"Error creando el grupo: {e}")
+        return None
 
 def join_group(group_id):
-    group_ref = db.collection('groups').document(group_id)
-    if group_ref.get().exists:
-        group_ref.update({
-            'members': firestore.ArrayUnion([st.session_state.username])
-        })
-        return True
-    return False
+    try:
+        group_ref = db.collection('groups').document(group_id)
+        if group_ref.get().exists:
+            group_ref.update({
+                'members': firestore.ArrayUnion([st.session_state.username])
+            })
+            return True
+        return False
+    except Exception as e:
+        st.error(f"Error uniéndose al grupo: {e}")
+        return False
 
 def send_message(message):
     if st.session_state.current_group and message:
-        group_ref = db.collection('groups').document(st.session_state.current_group)
-        group_ref.update({
-            'messages': firestore.ArrayUnion([{
-                'text': message,
-                'sender': st.session_state.username,
-                'timestamp': datetime.now().isoformat()
-            }])
-        })
+        try:
+            group_ref = db.collection('groups').document(st.session_state.current_group)
+            group_ref.update({
+                'messages': firestore.ArrayUnion([{
+                    'text': message,
+                    'sender': st.session_state.username,
+                    'timestamp': datetime.now().isoformat()
+                }])
+            })
+        except Exception as e:
+            st.error(f"Error enviando el mensaje: {e}")
 
 def get_messages():
     if st.session_state.current_group:
-        group_ref = db.collection('groups').document(st.session_state.current_group)
-        messages = group_ref.get().to_dict().get('messages', [])
-        return sorted(messages, key=lambda x: x['timestamp'])
+        try:
+            group_ref = db.collection('groups').document(st.session_state.current_group)
+            messages = group_ref.get().to_dict().get('messages', [])
+            return sorted(messages, key=lambda x: x['timestamp'])
+        except Exception as e:
+            st.error(f"Error obteniendo mensajes: {e}")
     return []
 
 # Interfaz de usuario
@@ -105,9 +116,10 @@ else:
             st.markdown("### Crear nuevo grupo")
             if st.button("Crear Grupo"):
                 group_id = create_group()
-                st.session_state.current_group = group_id
-                st.success(f"Grupo creado con ID: {group_id}")
-                st.experimental_rerun()
+                if group_id:
+                    st.session_state.current_group = group_id
+                    st.success(f"Grupo creado con ID: {group_id}")
+                    st.experimental_rerun()
 
         with col2:
             st.markdown("### Unirse a un grupo existente")
