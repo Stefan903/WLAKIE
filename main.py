@@ -16,12 +16,14 @@ CHUNK = 1024  # Tamaño del búfer de audio
 
 # Variables globales
 audio_queue = queue.Queue()
+is_recording = False
 
 # Función para grabar audio
 def record_audio():
+    global is_recording
     st.write("Grabando...")
     with sd.InputStream(samplerate=RATE, channels=1, dtype='int16') as stream:
-        while True:
+        while is_recording:
             data, _ = stream.read(CHUNK)
             audio_queue.put(data.tobytes())  # Encolar el audio para enviarlo a los usuarios
 
@@ -45,8 +47,14 @@ if name and channel:
     st.write(f"Bienvenido, {name}! Te has unido al canal {channel}.")
 
     if st.button("Iniciar Grabación"):
-        threading.Thread(target=record_audio, daemon=True).start()
-        threading.Thread(target=broadcast_audio, args=(channel,), daemon=True).start()
+        if not is_recording:
+            is_recording = True
+            threading.Thread(target=record_audio, daemon=True).start()
+            threading.Thread(target=broadcast_audio, args=(channel,), daemon=True).start()
+
+    if st.button("Detener Grabación"):
+        is_recording = False
+        st.write("Grabación detenida.")
 
 if __name__ == '__main__':
     socketio.run(flask_app)
