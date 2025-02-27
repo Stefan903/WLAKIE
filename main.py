@@ -732,8 +732,6 @@ if __name__ == '__main__':
         ''')
     
     # Iniciar el servidor
-    socketio.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)), debug=True)
-        st.write("Grabación detenida.")
-
 if __name__ == '__main__':
-    socketio.run(flask_app)
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port)
