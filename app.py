@@ -1,7 +1,6 @@
 import streamlit as st
-import pyaudio
-import wave
-import socketio
+import sounddevice as sd
+import numpy as np
 from flask import Flask
 from flask_socketio import SocketIO
 import threading
@@ -11,41 +10,27 @@ import queue
 flask_app = Flask(__name__)
 socketio = SocketIO(flask_app, cors_allowed_origins="*")
 
-# Configuración de PyAudio
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 44100
-CHUNK = 1024
-
-audio = pyaudio.PyAudio()
+# Configuración de audio
+RATE = 44100  # Tasa de muestreo
+CHUNK = 1024  # Tamaño del búfer de audio
 
 # Variables globales
-stream = None
-frames = []
+audio_queue = queue.Queue()
 
 # Función para grabar audio
 def record_audio():
-    global stream
-    stream = audio.open(format=FORMAT, channels=CHANNELS,
-                        rate=RATE, input=True,
-                        frames_per_buffer=CHUNK)
     st.write("Grabando...")
-    while True:
-        try:
-            data = stream.read(CHUNK)
-            frames.append(data)
-            socketio.emit('audio_data', {'data': data})
-        except Exception as e:
-            st.error(f"Error en la grabación: {e}")
-            break
+    with sd.InputStream(samplerate=RATE, channels=1, dtype='int16') as stream:
+        while True:
+            data, _ = stream.read(CHUNK)
+            audio_queue.put(data.tobytes())  # Encolar el audio para enviarlo a los usuarios
 
-# Función para detener la grabación
-def stop_recording():
-    global stream
-    if stream:
-        stream.stop_stream()
-        stream.close()
-    st.write("Grabación detenida.")
+# Función para enviar audio a los usuarios
+def broadcast_audio(channel):
+    while True:
+        if not audio_queue.empty():
+            data = audio_queue.get()
+            socketio.emit('audio_stream', {'data': data}, room=channel)
 
 # Interfaz de Streamlit
 st.title("Walkie-Talkie App 🎤")
@@ -61,9 +46,7 @@ if name and channel:
 
     if st.button("Iniciar Grabación"):
         threading.Thread(target=record_audio, daemon=True).start()
-
-    if st.button("Detener Grabación"):
-        stop_recording()
+        threading.Thread(target=broadcast_audio, args=(channel,), daemon=True).start()
 
 if __name__ == '__main__':
     socketio.run(flask_app)
