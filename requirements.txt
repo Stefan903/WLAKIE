@@ -3,5 +3,5 @@ Flask-SocketIO==5.1.1
 Flask-Cors==3.0.10
 Werkzeug==2.0.1
 python-socketio==5.3.0
-dnspython==2.1.0
+dnspython==1.16.0  # Versión compatible con eventlet
 eventlet==0.30.2
